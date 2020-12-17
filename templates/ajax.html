@@ -1,0 +1,89 @@
+<html>
+
+<head>
+    <title>Demo Page</title>
+    <script>
+        function check()
+        {
+            var emailid=document.getElementById("one").value;
+            var sub=document.getElementById("two");
+            if(emailid == "") {
+                alert("Enter your Email");
+
+            }
+            else{
+                var parm ="EM="+emailid;
+                var xhttp= new XMLHttpRequest();
+                xhttp.onreadystatechange =show;
+                xhttp.open("POST", "http://127.0.0.1:8000/validate,true");
+                xhttp.send(parm);
+                function show()
+                {
+                    if (xhttp==4) {
+                        var x = xhttp.responseText
+                        var json_data =JSON.parse(x);
+                        var span=document.getElementById("m_email")
+
+                        if (json_data.result)
+                        {
+                           document.getElementById("m_email").innerText="This Emial is not Avaliable"
+                            sub.disabled=true;
+                        }
+                        else {
+                            document.getElementById("m_email").innerText="This Emial  Avaliable"
+                            sub.disabled=false;
+                        }
+                    }
+                }
+
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <div class card>
+    <div class card-head>
+        <h1>Enter Your Details</h1>
+    </div>
+        <div class card-body>
+
+    <form action="{% url 'Save_DB' %}", method="post">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <th>
+                        <input type="number" placeholder="Number" required name="t1">
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        <input type="text" placeholder="Name" required name="t2">
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        <input type="email" id="one" placeholder="Emial" onblur="check()"  required name="t4">
+                    <span id="m_email"></span>
+                    </th>
+
+                </tr>
+                <tr>
+                <tr>
+                    <th>
+                        <input type="number" placeholder="Contact" required name="t3">
+                    <th>
+                    </tr>
+
+                    <th>
+                        <button type="submit" id="two" disabled >Save</button>
+                    </th>
+                </tr>
+            </table>
+    </form>
+</div>
+</div>
+</body>
+</html>
+
+
